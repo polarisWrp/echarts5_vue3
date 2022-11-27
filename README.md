@@ -1,5 +1,28 @@
 # echarts-demo
 
+## Project setup
+```
+yarn install
+```
+
+### Compiles and hot-reloads for development
+```
+yarn serve
+```
+
+### Compiles and minifies for production
+```
+yarn build
+```
+
+### Lints and fixes files
+```
+yarn lint
+```
+
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).
+
 ## 日期格式化 dayjs
 - yarn add dayjs
 - 用于与moment类似
@@ -74,25 +97,92 @@ const dataOption: EChartsOption = {
 </style>
 ```
 
-## Project setup
-```
-yarn install
+## 全局echarts常用方法
+- init 【初始化echarts实例，第二个参数使用主题】
+- registerTheme 【用于注册自定义主题】
+- registerMap 【注册地图图表】
+- connect 【一个页面可以有多个图表，此方法用于关联多个图表】
+  以下栗子为使用connect方法后，点击下载图片按钮会下载chart1和chart2的组合图片
+```js
+const option = {
+  toolbox: {
+    feature: {
+      saveAsImage: {}
+    }
+  }
+}
+
+const echarts = echarts.init('dom')
+echarts.setOption(option)
+echarts.connect([chart1, chart2])
 ```
 
-### Compiles and hot-reloads for development
+## echarts实例的常用方法
+- setOption
+  该方法可以被调用多次，并且会**合并**新旧配置
+- resize
+  重新计算和绘制图表
+```js
+window.onresize = function() {
+  echartsInstance.resize()
+}
 ```
-yarn serve
+- on/off
+  1. 用于绑定或者解绑事件处理函数
+  2. 鼠标事件【click, dblick, mouseover, mouseout】
+```js
+// 回调函数接收事件参数
+echartsInstance.on('click', function(e) {
+  console.log(e)
+})
 ```
+  3. echarts事件【legendselectchanged,datazoom】
+    图例发生改变等
+```js
+const pieData = [{value: 11, name: 'kk'}, {value: 55, name: 'pp'}]
+const option = {
+  legend: {
+    data: ['kk', 'pp']
+  },
+  series: [{
+    type: 'pie',
+    data: pieData
+  }]
+}
+echartsInstance.setOption(option)
+// 图例变化输出值
+echartsInstance.on('legendselectchanged', function(e) {
+  console.log(e)
+})
+echartsInstance.off('legendselectchanged')
+```
+  4. dispatchAction方法
+    触发某些行为，使用代码模拟用户的一些行为
+```js
+<button id='btn'>点击按钮</button>
 
-### Compiles and minifies for production
-```
-yarn build
-```
+// 点击按钮后图表高亮
+const btn = document.getElementById('#btn')
+btn.onclick = function() {
+  // 模拟用户行为
+  echartsInstance.dispatchAction({
+    type: 'highlight',//事件类型【图表高亮】
+    seriesIndex: 0, //图表索引，指向 series数组下标对应值
+    dataIndex: 1 //图表那一项高亮，指向data数组下标对应值
+  })
+  echartsInstance.dispatchAction({
+    type: 'showTip',//事件类型 【鼠标移入时提示框】
+    seriesIndex: 0, //图表索引，指向 series数组下标对应值
+    dataIndex: 1 //图表那一项高亮，指向data数组下标对应值
+  })
+}
 
-### Lints and fixes files
 ```
-yarn lint
-```
+  5. clear 清空图表实例， dispose销毁实例
+    clear 清除之后可以再次调用 setOption设置数据
+    dispose 销毁之后无法设置数据
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+```js
+echartsInstance.clear()
+echartsInstance.dispose()
+```
