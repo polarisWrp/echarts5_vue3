@@ -47,14 +47,14 @@
         </div>
       </section>
       <section class="home-right">
-        <div id="right-top" :class="{ fullScreen: fullScreenStatus.hot }">
+        <div id="right-top" :class="{ fullscreen: fullScreenStatus.hot }">
           <!-- 热销商品占比情况 -->
           <HotChart :socketInstance="socketInstance" ref="hotRef" />
           <div class="resize" @click="changeSize('hot')">
             <span :class="getScreenStatus('hot')"></span>
           </div>
         </div>
-        <div id="right-bottom" :class="{ fullScreen: fullScreenStatus.stock }">
+        <div id="right-bottom" :class="{ fullscreen: fullScreenStatus.stock }">
           <!-- 库存销量分析图表 -->
           <StockChart :socketInstance="socketInstance" ref="stockRef" />
           <div class="resize" @click="changeSize('stock')">

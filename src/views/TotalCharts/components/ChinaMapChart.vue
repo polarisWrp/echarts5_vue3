@@ -7,7 +7,6 @@
 </template>
 
 <script setup lang="ts">
-import { getThemeConfig } from '@/utils/themeUtils';
 import SocketService from '@/utils/useWebSocket';
 import * as $echarts from 'echarts';
 import { EChartsOption } from 'echarts';
@@ -25,7 +24,6 @@ import { useStore } from '@/store/index';
 import axios from 'axios';
 import { UserData } from '@/types/charts';
 import { getProvinceMapInfo } from '@/utils/mapUtil';
-import router from '@/router/index';
 
 const store = useStore();
 const mapRef = ref<HTMLDivElement>();

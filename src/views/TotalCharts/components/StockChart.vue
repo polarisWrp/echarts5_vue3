@@ -150,7 +150,10 @@ const updateChart = () => {
       type: 'pie',
       // radius: [110, 100], //通过设置两个圆半径实现圆环
       center: stockCenterPosition[index],
-      hoverAnimation: false, //关闭鼠标移入饼图时的动画效果
+      // hoverAnimation: false, //关闭鼠标移入饼图时的动画效果
+      emphasis: {
+        scale: false,
+      },
       labelLine: {
         show: false, //隐藏指示线
       },
